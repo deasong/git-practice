@@ -1,0 +1,51 @@
+CREATE TABLE passports
+(
+    id            SERIAL PRIMARY KEY,
+    name          VARCHAR NOT NULL,
+    unique_number INTEGER
+);
+CREATE TABLE users
+(
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR NOT NULL,
+    last_name   VARCHAR,
+    age         INTEGER,
+    passport_id INTEGER,
+    FOREIGN KEY (passport_id) REFERENCES passports (id)
+);
+INSERT INTO passports(name, unique_number)
+VALUES ('passport', 234423),
+       ('foreign passport', 122255);
+
+INSERT INTO users(name, last_name, age, passport_id)
+VALUES ('John', 'Lee', 36, 1),
+       ('Oleg', 'Galkin', 23, 2),
+       ('Michele', 'Dark', 12, null);
+--INNER JOIN
+SELECT p.name,
+       p.id,
+       p.unique_number,
+       u.name,
+       u.id
+FROM users u
+         INNER JOIN passports p on p.id = u.passport_id;
+--LEFT JOIN
+SELECT u.id,
+       u.passport_id,
+       u.name,
+       p.id,
+       p.name,
+       p.unique_number
+FROM users u
+         LEFT JOIN passports p on p.id = u.passport_id;
+--RIGHT JOIN
+SELECT u.name,
+       u.id,
+       u.passport_id,
+       p.name,
+       p.unique_number,
+       p.id
+FROM users u
+         RIGHT JOIN passports p on p.id = u.passport_id;
+--FULL JOIN
+SELECT * FROM users u FULL JOIN passports p on p.id = u.passport_id;
